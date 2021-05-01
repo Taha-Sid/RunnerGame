@@ -79,10 +79,36 @@ class Boss(pygame.sprite.Sprite):
 class Enemy(pygame.sprite.Sprite):
     def __init__(self,x,y):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load('enemy1.png')
+        self.walk = [pygame.image.load('enemy1.png'),pygame.image.load('enemy2.png'),pygame.image.load('enemy3.png'),pygame.image.load('enemy4.png'),pygame.image.load('enemy5.png')]
+        self.walk_opposite = [pygame.image.load('enemy1_opposite.png'),pygame.image.load('enemy2_opposite.png'),pygame.image.load('enemy3_opposite.png'),pygame.image.load('enemy4_opposite.png'),pygame.image.load('enemy5_opposite.png')]
+        self.current_image = 0
+        self.image = self.walk[0]
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+        self.enemy_x_speed = -1
+        self.enemy_y_speed = 0
+        self.delay = pygame.time.get_ticks()
+
+
+    def update(self):
+        time_now = pygame.time.get_ticks()
+        if time_now - self.delay >= 125: # controls enemy running animation speed
+            self.current_image += 1
+            if self.current_image > 4:
+                self.current_image = 0
+            self.image = self.walk[self.current_image]
+            self.delay = pygame.time.get_ticks()
+        self.rect.x += self.enemy_x_speed
+        self.rect.y += self.enemy_y_speed
+
+        if self.rect.x < 28:
+            self.enemy_x_speed *= -1
+            #self.image = self.walk_opposite[self.current_image]
+        if self.rect.x > 610:
+            self.enemy_x_speed *= -1
+            #self.image = self.walk[self.current_image]
+        
 
 class Wall(pygame.sprite.Sprite):
     def __init__(self,x,y):
@@ -100,7 +126,7 @@ player_list = pygame.sprite.Group()
 walls_list = pygame.sprite.Group()
 all_sprites_list.add(player)
 #all_sprites_list.add(boss)
-enemy = Enemy(100,100)
+enemy = Enemy(600,535)
 all_sprites_list.add(enemy)
 
 
