@@ -79,8 +79,8 @@ class Boss(pygame.sprite.Sprite):
 class Enemy(pygame.sprite.Sprite):
     def __init__(self,x,y):
         pygame.sprite.Sprite.__init__(self)
-        self.walk = [pygame.image.load('enemy1.png'),pygame.image.load('enemy2.png'),pygame.image.load('enemy3.png'),pygame.image.load('enemy4.png'),pygame.image.load('enemy5.png')]
-        self.walk_opposite = [pygame.image.load('enemy1_opposite.png'),pygame.image.load('enemy2_opposite.png'),pygame.image.load('enemy3_opposite.png'),pygame.image.load('enemy4_opposite.png'),pygame.image.load('enemy5_opposite.png')]
+        self.walk = [pygame.image.load('walk/enemy1.png'),pygame.image.load('walk/enemy2.png'),pygame.image.load('walk/enemy3.png'),pygame.image.load('walk/enemy4.png'),pygame.image.load('walk/enemy5.png')]
+        self.walk_opposite = [pygame.image.load('walk_opposite/enemy1_opposite.png'),pygame.image.load('walk_opposite/enemy2_opposite.png'),pygame.image.load('walk_opposite/enemy3_opposite.png'),pygame.image.load('walk_opposite/enemy4_opposite.png'),pygame.image.load('walk_opposite/enemy5_opposite.png')]
         self.current_image = 0
         self.image = self.walk[0]
         self.rect = self.image.get_rect()
@@ -89,6 +89,7 @@ class Enemy(pygame.sprite.Sprite):
         self.enemy_x_speed = -1
         self.enemy_y_speed = 0
         self.delay = pygame.time.get_ticks()
+        self.swap = 0
 
 
     def update(self):
@@ -97,17 +98,20 @@ class Enemy(pygame.sprite.Sprite):
             self.current_image += 1
             if self.current_image > 4:
                 self.current_image = 0
-            self.image = self.walk[self.current_image]
+            if self.swap == 0: # swap changes the list of images to the one facing the other direction
+                self.image = self.walk[self.current_image]
+            else:
+                self.image = self.walk_opposite[self.current_image]
             self.delay = pygame.time.get_ticks()
         self.rect.x += self.enemy_x_speed
         self.rect.y += self.enemy_y_speed
 
         if self.rect.x < 28:
             self.enemy_x_speed *= -1
-            #self.image = self.walk_opposite[self.current_image]
+            self.swap = 1
         if self.rect.x > 610:
             self.enemy_x_speed *= -1
-            #self.image = self.walk[self.current_image]
+            self.swap = 0
         
 
 class Wall(pygame.sprite.Sprite):
