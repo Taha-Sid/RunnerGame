@@ -66,6 +66,11 @@ class Player(pygame.sprite.Sprite):
             player.rect.bottom = player_wall[0].rect.top
             if y_speed < 0:
                 player.rect.top = player_wall[0].rect.bottom
+
+
+        player_hit_enemy = pygame.sprite.spritecollide(player, enemy_list, False)
+        if player_hit_enemy:
+            self.rect.x -= 20
         
             
 class Boss(pygame.sprite.Sprite):
@@ -86,7 +91,7 @@ class Enemy(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
-        self.enemy_x_speed = -1
+        self.enemy_x_speed = -2
         self.enemy_y_speed = 0
         self.delay = pygame.time.get_ticks()
         self.swap = 0
@@ -112,6 +117,10 @@ class Enemy(pygame.sprite.Sprite):
         if self.rect.x > 610:
             self.enemy_x_speed *= -1
             self.swap = 0
+
+        enemy_hit_player = pygame.sprite.spritecollide(enemy, player_list, False)
+        if enemy_hit_player:
+            self.rect.x += 20
         
 
 class Wall(pygame.sprite.Sprite):
@@ -127,11 +136,15 @@ all_sprites_list = pygame.sprite.Group()
 #boss = Boss()
 player = Player()
 player_list = pygame.sprite.Group()
+player_list.add(player)
 walls_list = pygame.sprite.Group()
 all_sprites_list.add(player)
 #all_sprites_list.add(boss)
 enemy = Enemy(600,535)
+enemy_list = pygame.sprite.Group()
+enemy_list.add(enemy)
 all_sprites_list.add(enemy)
+all_sprites_list.add(enemy_list)
 
 
 for x in range(25):
