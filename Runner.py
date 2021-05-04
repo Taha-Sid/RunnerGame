@@ -106,8 +106,13 @@ class Sword(pygame.sprite.Sprite):
         self.rect.y = player.rect.y
         global sword_on_screen
         sword_on_screen = True
-        self.kill()
-        sword_on_screen = False
+
+    def update(self):
+        global sword_on_screen
+        if sword_on_screen:
+            self.kill()
+            sword_on_screen = False
+        
    
 class Enemy(pygame.sprite.Sprite):
     def __init__(self,x,y):
