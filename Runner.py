@@ -67,11 +67,12 @@ class Player(pygame.sprite.Sprite):
             if y_speed < 0:
                 player.rect.top = player_wall[0].rect.bottom
 
-
+        
         player_hit_enemy = pygame.sprite.spritecollide(player, enemy_list, False)
         if player_hit_enemy:
-            self.rect.x -= 20
-        
+            self.rect.x -= 50
+            enemy.rect.x += 50
+               
             
 class Boss(pygame.sprite.Sprite):
     def __init__(self):
@@ -118,10 +119,7 @@ class Enemy(pygame.sprite.Sprite):
             self.enemy_x_speed *= -1
             self.swap = 0
 
-        enemy_hit_player = pygame.sprite.spritecollide(enemy, player_list, False)
-        if enemy_hit_player:
-            self.rect.x += 20
-        
+
 
 class Wall(pygame.sprite.Sprite):
     def __init__(self,x,y):
