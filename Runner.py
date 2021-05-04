@@ -6,9 +6,6 @@ GREEN = (0,255,0)
 RED = (255,0,0)
 BLUE = (0,0,255)
 
-x_speed = 0
-y_speed = 0
-
 pygame.init()
  
 size = (700, 600) # x,y
@@ -48,10 +45,13 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = 40
         self.rect.y = 570
+        self.x_speed = 0
+        self.y_speed = 0
+        self.swap = 0
 
     def update(self):
-        player.rect.x += x_speed
-        player.rect.y += y_speed
+        player.rect.x += self.x_speed
+        player.rect.y += self.y_speed
         if player.rect.x < 28:
             player.rect.x = 28
         if player.rect.x > 610:
@@ -61,18 +61,28 @@ class Player(pygame.sprite.Sprite):
         if player.rect.y > 520:
             player.rect.y = 520
 
+        if keys[pygame.K_RIGHT]:
+            self.swap = 1
+        if keys[pygame.K_LEFT]:
+            self.swap = 0
+
         player_wall = pygame.sprite.spritecollide(player, walls_list, False)
         if player_wall:
             player.rect.bottom = player_wall[0].rect.top
-            if y_speed < 0:
+            if self.y_speed < 0:
                 player.rect.top = player_wall[0].rect.bottom
 
         
         player_hit_enemy = pygame.sprite.spritecollide(player, enemy_list, False)
         if player_hit_enemy:
-            self.rect.x -= 50
-            enemy.rect.x += 50
+            if self.swap == 1:
+                self.rect.x -= 20
+                enemy.rect.x += 20
+            else:
+                self.rect.x += 20
+                enemy.rect.x -= 20             
                
+
             
 class Boss(pygame.sprite.Sprite):
     def __init__(self):
@@ -163,22 +173,22 @@ while not done:
             done = True
 
     keys = pygame.key.get_pressed()
-    y_speed += 2 # gravity that constantly pulls player down
-    x_speed = 0
+    player.y_speed += 2 # gravity that constantly pulls player down
+    player.x_speed = 0
 
     player.rect.y += 10
     player_wall_hit = pygame.sprite.spritecollide(player, walls_list, False)
     player.rect.y -= 10
     if player_wall_hit:
         if keys[pygame.K_UP]:
-            y_speed -= 30
+            player.y_speed -= 30
             player.image = pygame.image.load('reaper.png')
     if keys[pygame.K_RIGHT]:
         player.image = pygame.image.load('reaper.png')
-        x_speed += 3
+        player.x_speed += 3
     if keys[pygame.K_LEFT]:
         player.image = pygame.image.load('reaper_backwards.png')
-        x_speed -= 3    
+        player.x_speed -= 3    
 
 
     screen.fill(BLACK)
