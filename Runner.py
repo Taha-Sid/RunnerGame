@@ -87,6 +87,12 @@ class Player(pygame.sprite.Sprite):
                 enemy.rect.x -= 20
                 if enemy.rect.x < 30:
                     enemy.rect.x = 30
+
+        player_hit_portal = pygame.sprite.spritecollide(player, portal_list, False)
+        if player_hit_portal:
+            all_sprites_list.empty()
+        
+        
                
             
 class Boss(pygame.sprite.Sprite):
@@ -161,6 +167,16 @@ class Wall(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
 
+
+class Portal(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load('portal.png')
+        self.rect = self.image.get_rect()       
+        self.rect.x = 40
+        self.rect.y = 40
+
+
 all_sprites_list = pygame.sprite.Group()
 #boss = Boss()
 player = Player()
@@ -175,6 +191,11 @@ enemy_list.add(enemy)
 sword_list = pygame.sprite.Group()
 all_sprites_list.add(enemy)
 all_sprites_list.add(enemy_list)
+portal = Portal()
+portal_list = pygame.sprite.Group()
+portal_list.add(portal)
+all_sprites_list.add(portal)
+all_sprites_list.add(portal_list)
 
 
 for x in range(25):
@@ -214,7 +235,7 @@ while not done:
     if keys[pygame.K_SPACE] and sword_on_screen == False:
         sword = Sword()
         sword_list.add(sword)
-        all_sprites_list.add(sword)
+        #all_sprites_list.add(sword)
 
     screen.fill(BLACK)
  
