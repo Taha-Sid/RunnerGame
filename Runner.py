@@ -51,9 +51,10 @@ class Player(pygame.sprite.Sprite):
         self.rect.y = y
         self.x_speed = 0
         self.y_speed = 0
-        self.swap = 0
+        self.swap = 0 # facing left
         self.player_wall = []
         self.health = 10
+        self.damage = 3
         
         
     def update(self):
@@ -154,11 +155,14 @@ class Enemy(pygame.sprite.Sprite):
         self.enemy_x_speed = -2
         self.enemy_y_speed = 0
         self.delay = pygame.time.get_ticks()
-        self.swap = 0
+        self.swap = 0 # facing left
         self.health = 5
         self.damage = 1
         
     def update(self):
+        if self.health <= 0:
+            self.kill()
+            
         time_now = pygame.time.get_ticks()
         if time_now - self.delay >= 125: # controls enemy running animation speed
             self.current_image += 1
@@ -177,6 +181,16 @@ class Enemy(pygame.sprite.Sprite):
         if self.rect.x > 610:
             self.enemy_x_speed *= -1
             self.swap = 0
+
+        enemy_hit_by_sword = pygame.sprite.spritecollide(enemy, sword_list, False)
+        if enemy_hit_by_sword:
+            self.health -= player.damage
+            if self.swap == 1:
+                self.rect.x -= 80
+            else:
+                self.rect.x += 80
+
+
             
 class Wall(pygame.sprite.Sprite):
     def __init__(self,x,y):
