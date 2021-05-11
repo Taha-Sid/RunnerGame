@@ -186,7 +186,7 @@ class Enemy(pygame.sprite.Sprite):
             self.enemy_x_speed *= -1
             self.swap = 0
 
-        enemy_hit_by_sword = pygame.sprite.spritecollide(enemy, sword_list, False)
+        enemy_hit_by_sword = pygame.sprite.spritecollide(self, sword_list, False)
         if enemy_hit_by_sword:
             self.health -= player.damage
             if self.swap == 1:
