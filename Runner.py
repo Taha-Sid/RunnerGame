@@ -129,7 +129,11 @@ class Sword(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load('sword.png')
         self.rect = self.image.get_rect()
-        self.rect.x = player.rect.x
+        if player.swap == 1:
+            self.rect.x = player.rect.x + 50
+        else:
+            self.rect.x = player.rect.x - 50
+            self.image = pygame.transform.flip(self.image, True, False) # This flips the image vertically. True means in the x direction. False because no flip is needed in the y direction.
         self.rect.y = player.rect.y
         self.sword_on_screen = True
         self.spawn_time = pygame.time.get_ticks()
