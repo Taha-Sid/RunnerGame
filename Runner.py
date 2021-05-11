@@ -12,7 +12,6 @@ pygame.init()
 size = (700, 600) # x,y
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Runner")
-sword_on_screen = False
 
 map_one = [[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
@@ -132,15 +131,16 @@ class Sword(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = player.rect.x
         self.rect.y = player.rect.y
-        global sword_on_screen
-        sword_on_screen = True
-    '''
+        self.sword_on_screen = True
+        self.spawn_time = pygame.time.get_ticks()
+    
     def update(self):
-        global sword_on_screen
-        if sword_on_screen:
-            self.kill()
-            sword_on_screen = False
-    ''' 
+        if self.sword_on_screen:
+            now = pygame.time.get_ticks()
+            if now - self.spawn_time >= 100:
+                self.kill()
+                self.sword_on_screen = False
+     
    
 class Enemy(pygame.sprite.Sprite):
     def __init__(self,x,y):
@@ -266,7 +266,7 @@ while not done:
     if keys[pygame.K_LEFT]:
         player.image = pygame.image.load('reaper_backwards.png')
         player.x_speed -= 3
-    if keys[pygame.K_SPACE] and sword_on_screen == False:
+    if keys[pygame.K_SPACE] and len(sword_list.sprites()) == 0:
         sword = Sword()
         sword_list.add(sword)
         all_sprites_list.add(sword)
