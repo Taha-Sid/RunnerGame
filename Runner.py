@@ -5,15 +5,14 @@ WHITE = (255,255,255)
 GREEN = (0,255,0)
 RED = (255,0,0)
 BLUE = (0,0,255)
-
 pygame.init()
- 
+
+#mixer.music.load('adventurous_music.mp3')
+
 size = (700, 600) # x,y
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Runner")
-
 sword_on_screen = False
-
 map_one = [[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
@@ -50,7 +49,9 @@ class Player(pygame.sprite.Sprite):
         self.x_speed = 0
         self.y_speed = 0
         self.swap = 0
+        self.player_wall = False
 
+        
     def update(self):
         player.rect.x += self.x_speed
         player.rect.y += self.y_speed
@@ -62,18 +63,16 @@ class Player(pygame.sprite.Sprite):
             player.rect.y = 25
         if player.rect.y > 520:
             player.rect.y = 520
-
         if keys[pygame.K_RIGHT]:
             self.swap = 1
         if keys[pygame.K_LEFT]:
             self.swap = 0
-
-        player_wall = pygame.sprite.spritecollide(player, walls_list, False)
-        if player_wall:
-            player.rect.bottom = player_wall[0].rect.top
+            
+        self.player_wall = pygame.sprite.spritecollide(player, walls_list, False)
+        if self.player_wall:
+            player.rect.bottom = self.player_wall[0].rect.top
             if self.y_speed < 0:
-                player.rect.top = player_wall[0].rect.bottom
-
+                player.rect.top = self.player_wall[0].rect.bottom
         
         player_hit_enemy = pygame.sprite.spritecollide(player, enemy_list, False)
         if player_hit_enemy:
@@ -91,10 +90,15 @@ class Player(pygame.sprite.Sprite):
         player_hit_portal = pygame.sprite.spritecollide(player, portal_list, False)
         if player_hit_portal:
             all_sprites_list.empty()
-        
-        
-               
-            
+
+
+        '''            
+        player_collects_coin = pygame.sprite.spritecollide(player, coin_list, False)
+        if player_collects_coin:
+            mixer.music.load('coin_collecting_audio.mp3')
+        '''
+
+
 class Boss(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -102,7 +106,16 @@ class Boss(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = 40
         self.rect.y = 50
+        self.health = 100
 
+    def update(self):
+        if self.health <= 0:
+            self.kill()
+            coin = Coin()
+            coin_list.add(coin)
+            all_sprites_list.add(coin)
+            
+        
 class Sword(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -112,13 +125,13 @@ class Sword(pygame.sprite.Sprite):
         self.rect.y = player.rect.y
         global sword_on_screen
         sword_on_screen = True
-
+    '''
     def update(self):
         global sword_on_screen
         if sword_on_screen:
             self.kill()
             sword_on_screen = False
-        
+    ''' 
    
 class Enemy(pygame.sprite.Sprite):
     def __init__(self,x,y):
@@ -134,8 +147,7 @@ class Enemy(pygame.sprite.Sprite):
         self.enemy_y_speed = 0
         self.delay = pygame.time.get_ticks()
         self.swap = 0
-
-
+        
     def update(self):
         time_now = pygame.time.get_ticks()
         if time_now - self.delay >= 125: # controls enemy running animation speed
@@ -149,15 +161,13 @@ class Enemy(pygame.sprite.Sprite):
             self.delay = pygame.time.get_ticks()
         self.rect.x += self.enemy_x_speed
         self.rect.y += self.enemy_y_speed
-
         if self.rect.x < 28:
             self.enemy_x_speed *= -1
             self.swap = 1
         if self.rect.x > 610:
             self.enemy_x_speed *= -1
             self.swap = 0
-
-
+            
 class Wall(pygame.sprite.Sprite):
     def __init__(self,x,y):
         pygame.sprite.Sprite.__init__(self)
@@ -204,21 +214,17 @@ for x in range(25):
             wall = Wall(x*28,y*24)
             all_sprites_list.add(wall)
             walls_list.add(wall)
-
-
 done = False
-
 clock = pygame.time.Clock()
  
 while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
-
     keys = pygame.key.get_pressed()
-    player.y_speed += 2 # gravity that constantly pulls player down
+    if not player.player_wall:
+        player.y_speed += 2 # gravity that constantly pulls player down
     player.x_speed = 0
-
     player.rect.y += 10
     player_wall_hit = pygame.sprite.spritecollide(player, walls_list, False)
     player.rect.y -= 10
@@ -235,13 +241,12 @@ while not done:
     if keys[pygame.K_SPACE] and sword_on_screen == False:
         sword = Sword()
         sword_list.add(sword)
-        #all_sprites_list.add(sword)
+        all_sprites_list.add(sword)
 
     screen.fill(BLACK)
- 
+
     all_sprites_list.update()
     all_sprites_list.draw(screen)
-
     pygame.display.flip()
  
     clock.tick(60)
