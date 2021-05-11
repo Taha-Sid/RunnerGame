@@ -13,13 +13,14 @@ size = (700, 600) # x,y
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Runner")
 sword_on_screen = False
+
 map_one = [[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
         [1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1],
@@ -27,32 +28,37 @@ map_one = [[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
         [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1],
         [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1],
         [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
         [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]]
 
+
+
 class Player(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self,x,y):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load('reaper.png')
         self.rect = self.image.get_rect()
-        self.rect.x = 40
-        self.rect.y = 570
+        self.rect.x = x
+        self.rect.y = y
         self.x_speed = 0
         self.y_speed = 0
         self.swap = 0
         self.player_wall = []
+        self.health = 10
         
         
     def update(self):
+        if self.health <= 0:
+            self.kill()
         player.rect.x += self.x_speed
         player.rect.y += self.y_speed
         if player.rect.x < 28:
@@ -76,8 +82,9 @@ class Player(pygame.sprite.Sprite):
         
         player_hit_enemy = pygame.sprite.spritecollide(player, enemy_list, False)
         if player_hit_enemy:
+            self.health -= enemy.damage
             if self.swap == 1:
-                self.rect.x -= 20
+                self.rect.x -= 50
                 enemy.rect.x += 20
                 if enemy.rect.x > 610:
                     enemy.rect.x = 610
@@ -90,7 +97,8 @@ class Player(pygame.sprite.Sprite):
         player_hit_portal = pygame.sprite.spritecollide(player, portal_list, False)
         if player_hit_portal:
             all_sprites_list.empty()
-
+            
+    
 
         '''            
         player_collects_coin = pygame.sprite.spritecollide(player, coin_list, False)
@@ -147,6 +155,8 @@ class Enemy(pygame.sprite.Sprite):
         self.enemy_y_speed = 0
         self.delay = pygame.time.get_ticks()
         self.swap = 0
+        self.health = 5
+        self.damage = 1
         
     def update(self):
         time_now = pygame.time.get_ticks()
@@ -179,17 +189,17 @@ class Wall(pygame.sprite.Sprite):
 
 
 class Portal(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self,x,y):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load('portal.png')
         self.rect = self.image.get_rect()       
-        self.rect.x = 40
-        self.rect.y = 40
+        self.rect.x = x
+        self.rect.y = y
 
 
 all_sprites_list = pygame.sprite.Group()
 #boss = Boss()
-player = Player()
+player = Player(40,570)
 player_list = pygame.sprite.Group()
 player_list.add(player)
 walls_list = pygame.sprite.Group()
@@ -201,7 +211,7 @@ enemy_list.add(enemy)
 sword_list = pygame.sprite.Group()
 all_sprites_list.add(enemy)
 all_sprites_list.add(enemy_list)
-portal = Portal()
+portal = Portal(40,40)
 portal_list = pygame.sprite.Group()
 portal_list.add(portal)
 all_sprites_list.add(portal)
@@ -214,6 +224,7 @@ for x in range(25):
             wall = Wall(x*28,y*24)
             all_sprites_list.add(wall)
             walls_list.add(wall)
+            
 done = False
 clock = pygame.time.Clock()
  
