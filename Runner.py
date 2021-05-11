@@ -49,8 +49,8 @@ class Player(pygame.sprite.Sprite):
         self.x_speed = 0
         self.y_speed = 0
         self.swap = 0
-        self.player_wall = False
-
+        self.player_wall = []
+        
         
     def update(self):
         player.rect.x += self.x_speed
@@ -70,9 +70,9 @@ class Player(pygame.sprite.Sprite):
             
         self.player_wall = pygame.sprite.spritecollide(player, walls_list, False)
         if self.player_wall:
-            player.rect.bottom = self.player_wall[0].rect.top
+            player.rect.bottom = self.player_wall[0].rect.top # this is when the player is standing on top of the platform
             if self.y_speed < 0:
-                player.rect.top = self.player_wall[0].rect.bottom
+                player.rect.top = self.player_wall[0].rect.bottom + 1 # this means if the player touches the bottom of a platform above it, it won't stick to it beacause the + 1 causes a pixel gap in between so they are not actually touching
         
         player_hit_enemy = pygame.sprite.spritecollide(player, enemy_list, False)
         if player_hit_enemy:
@@ -224,6 +224,9 @@ while not done:
     keys = pygame.key.get_pressed()
     if not player.player_wall:
         player.y_speed += 2 # gravity that constantly pulls player down
+    if player.player_wall:
+        if player.player_wall[0].rect.bottom < player.rect.top:
+            player.y_speed += 2
     player.x_speed = 0
     player.rect.y += 10
     player_wall_hit = pygame.sprite.spritecollide(player, walls_list, False)
