@@ -100,11 +100,12 @@ class Player(pygame.sprite.Sprite):
             
     
 
-        '''            
-        player_collects_coin = pygame.sprite.spritecollide(player, coin_list, False)
+                    
+        player_collects_coin = pygame.sprite.spritecollide(player, coin_list, True)
         if player_collects_coin:
-            mixer.music.load('coin_collecting_audio.mp3')
-        '''
+            #mixer.music.load('coin_collecting_audio.mp3')
+            pass
+        
 
 
 class Boss(pygame.sprite.Sprite):
@@ -166,6 +167,9 @@ class Enemy(pygame.sprite.Sprite):
     def update(self):
         if self.health <= 0:
             self.kill()
+            coin = Coin(self.rect.x,self.rect.y)
+            coin_list.add(coin)
+            all_sprites_list.add(coin)
             
         time_now = pygame.time.get_ticks()
         if time_now - self.delay >= 125: # controls enemy running animation speed
@@ -215,7 +219,27 @@ class Portal(pygame.sprite.Sprite):
         self.rect.y = y
 
 
+class Coin(pygame.sprite.Sprite):
+    def __init__(self,x,y):
+        pygame.sprite.Sprite.__init__(self)
+        self.spin = [pygame.image.load('coin1.png'),pygame.image.load('coin2.png'),pygame.image.load('coin3.png'),pygame.image.load('coin4.png')]
+        self.current_image = 0
+        self.image = self.spin[0]
+        self.rect = self.image.get_rect()
+        self.delay = pygame.time.get_ticks()
+        self.rect.x = x
+        self.rect.y = y
+
+
+    def update(self):
+        time_now = pygame.time.get_ticks()
+        if time_now - self.delay >= 125: # controls coin spinning animation speed
+            self.current_image += 1
+            if self.current_image > 4:
+                self.current_image = 0
+
 all_sprites_list = pygame.sprite.Group()
+coin_list = pygame.sprite.Group()
 #boss = Boss()
 player = Player(40,570)
 player_list = pygame.sprite.Group()
