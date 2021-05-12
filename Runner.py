@@ -16,26 +16,26 @@ pygame.display.set_caption("Runner")
 map_one = [[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1],
+        [1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
         [1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,1],
+        [1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1],
+        [1,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
         [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]]
 
@@ -52,8 +52,8 @@ class Player(pygame.sprite.Sprite):
         self.y_speed = 0
         self.swap = 0 # facing left
         self.player_wall = []
-        self.health = 10
-        self.damage = 3
+        self.health = 20
+        self.damage = 2
         
         
     def update(self):
@@ -84,21 +84,19 @@ class Player(pygame.sprite.Sprite):
         if player_hit_enemy:
             self.health -= enemy.damage
             if self.swap == 1:
-                self.rect.x -= 50
-                enemy.rect.x += 20
+                self.rect.x -= 80
+                enemy.rect.x += 30
                 if enemy.rect.x > 610:
                     enemy.rect.x = 610
             else:
-                self.rect.x += 20
-                enemy.rect.x -= 20
+                self.rect.x += 80
+                enemy.rect.x -= 30
                 if enemy.rect.x < 30:
                     enemy.rect.x = 30
 
         player_hit_portal = pygame.sprite.spritecollide(player, portal_list, False)
         if player_hit_portal:
             all_sprites_list.empty()
-            
-    
 
                     
         player_collects_coin = pygame.sprite.spritecollide(player, coin_list, True)
@@ -170,6 +168,8 @@ class Enemy(pygame.sprite.Sprite):
             coin = Coin(self.rect.x,self.rect.y)
             coin_list.add(coin)
             all_sprites_list.add(coin)
+            all_sprites_list.add(coin_list)
+
             
         time_now = pygame.time.get_ticks()
         if time_now - self.delay >= 125: # controls enemy running animation speed
@@ -224,19 +224,20 @@ class Coin(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.spin = [pygame.image.load('coin1.png'),pygame.image.load('coin2.png'),pygame.image.load('coin3.png'),pygame.image.load('coin4.png')]
         self.current_image = 0
-        self.image = self.spin[0]
+        self.image = self.spin[self.current_image]
         self.rect = self.image.get_rect()
         self.delay = pygame.time.get_ticks()
         self.rect.x = x
         self.rect.y = y
 
-
     def update(self):
         time_now = pygame.time.get_ticks()
-        if time_now - self.delay >= 125: # controls coin spinning animation speed
+        if self.current_image > 3:
+            self.current_image = 0
+        if time_now - self.delay >= 50: # controls coin spinning animation speed
             self.current_image += 1
-            if self.current_image > 4:
-                self.current_image = 0
+            self.image = self.spin[self.current_image]
+
 
 all_sprites_list = pygame.sprite.Group()
 coin_list = pygame.sprite.Group()
@@ -261,7 +262,12 @@ portal_list = pygame.sprite.Group()
 portal_list.add(portal)
 all_sprites_list.add(portal)
 all_sprites_list.add(portal_list)
-
+coin2 = Coin(340,340)
+coin_list.add(coin2)
+all_sprites_list.add(coin2)
+coin3 = Coin(500,500)
+coin_list.add(coin3)
+all_sprites_list.add(coin3)
 
 for x in range(25):
     for y in range(25):
