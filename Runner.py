@@ -148,7 +148,7 @@ class Sword(pygame.sprite.Sprite):
 class Enemy(pygame.sprite.Sprite):
     def __init__(self,x,y):
         pygame.sprite.Sprite.__init__(self)
-        self.total_enemies = 0
+        #self.total_enemies = 0
         self.walk = [pygame.image.load('walk/enemy1.png'),pygame.image.load('walk/enemy2.png'),pygame.image.load('walk/enemy3.png'),pygame.image.load('walk/enemy4.png'),pygame.image.load('walk/enemy5.png')]
         self.walk_opposite = [pygame.image.load('walk_opposite/enemy1_opposite.png'),pygame.image.load('walk_opposite/enemy2_opposite.png'),pygame.image.load('walk_opposite/enemy3_opposite.png'),pygame.image.load('walk_opposite/enemy4_opposite.png'),pygame.image.load('walk_opposite/enemy5_opposite.png')]
         self.current_image = 0
@@ -166,11 +166,16 @@ class Enemy(pygame.sprite.Sprite):
     def update(self):
         if self.health <= 0:
             self.kill()
-            self.total_enemies -= 1
+            #self.total_enemies -= 1
             coin = Coin(self.rect.x,self.rect.y)
             coin_list.add(coin)
             all_sprites_list.add(coin)
             all_sprites_list.add(coin_list)
+            if len(enemy_list.sprites()) == 0:
+                portal = Portal(40,40)
+                portal_list.add(portal)
+                all_sprites_list.add(portal)
+                all_sprites_list.add(portal_list)
 
             
         time_now = pygame.time.get_ticks()
@@ -234,11 +239,12 @@ class Coin(pygame.sprite.Sprite):
 
     def update(self):
         time_now = pygame.time.get_ticks()
-        if self.current_image > 3:
-            self.current_image = 0
-        if time_now - self.delay >= 50: # controls coin spinning animation speed
-            #self.current_image += 1
+        if time_now - self.delay >= 200: # controls coin spinning animation speed
+            self.current_image += 1
+            if self.current_image > 3:
+                self.current_image = 0
             self.image = self.spin[self.current_image]
+            self.delay = pygame.time.get_ticks()
 
 
 all_sprites_list = pygame.sprite.Group()
@@ -255,9 +261,9 @@ all_sprites_list.add(player)
 #all_sprites_list.add(boss)
 
 enemy = Enemy(600,535)
-enemy.total_enemies += 1
+#enemy.total_enemies += 1
 enemy2 = Enemy(500,535)
-enemy.total_enemies += 1
+#enemy.total_enemies += 1
 enemy_list = pygame.sprite.Group()
 enemy_list.add(enemy)
 enemy_list.add(enemy2)
@@ -268,11 +274,6 @@ all_sprites_list.add(enemy2)
 all_sprites_list.add(enemy_list)
 
 portal_list = pygame.sprite.Group()
-if enemy.total_enemies == 0:
-    portal = Portal(40,40)
-    portal_list.add(portal)
-    all_sprites_list.add(portal)
-    all_sprites_list.add(portal_list)
     
 coin2 = Coin(340,340)
 coin_list.add(coin2)
