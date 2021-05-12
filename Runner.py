@@ -148,6 +148,7 @@ class Sword(pygame.sprite.Sprite):
 class Enemy(pygame.sprite.Sprite):
     def __init__(self,x,y):
         pygame.sprite.Sprite.__init__(self)
+        self.total_enemies = 0
         self.walk = [pygame.image.load('walk/enemy1.png'),pygame.image.load('walk/enemy2.png'),pygame.image.load('walk/enemy3.png'),pygame.image.load('walk/enemy4.png'),pygame.image.load('walk/enemy5.png')]
         self.walk_opposite = [pygame.image.load('walk_opposite/enemy1_opposite.png'),pygame.image.load('walk_opposite/enemy2_opposite.png'),pygame.image.load('walk_opposite/enemy3_opposite.png'),pygame.image.load('walk_opposite/enemy4_opposite.png'),pygame.image.load('walk_opposite/enemy5_opposite.png')]
         self.current_image = 0
@@ -165,6 +166,7 @@ class Enemy(pygame.sprite.Sprite):
     def update(self):
         if self.health <= 0:
             self.kill()
+            self.total_enemies -= 1
             coin = Coin(self.rect.x,self.rect.y)
             coin_list.add(coin)
             all_sprites_list.add(coin)
@@ -235,33 +237,43 @@ class Coin(pygame.sprite.Sprite):
         if self.current_image > 3:
             self.current_image = 0
         if time_now - self.delay >= 50: # controls coin spinning animation speed
-            self.current_image += 1
+            #self.current_image += 1
             self.image = self.spin[self.current_image]
 
 
 all_sprites_list = pygame.sprite.Group()
+
 coin_list = pygame.sprite.Group()
-#boss = Boss()
+
 player = Player(40,570)
 player_list = pygame.sprite.Group()
 player_list.add(player)
 walls_list = pygame.sprite.Group()
 all_sprites_list.add(player)
+
+#boss = Boss()
 #all_sprites_list.add(boss)
+
 enemy = Enemy(600,535)
+enemy.total_enemies += 1
 enemy2 = Enemy(500,535)
+enemy.total_enemies += 1
 enemy_list = pygame.sprite.Group()
 enemy_list.add(enemy)
 enemy_list.add(enemy2)
+
 sword_list = pygame.sprite.Group()
 all_sprites_list.add(enemy)
 all_sprites_list.add(enemy2)
 all_sprites_list.add(enemy_list)
-portal = Portal(40,40)
+
 portal_list = pygame.sprite.Group()
-portal_list.add(portal)
-all_sprites_list.add(portal)
-all_sprites_list.add(portal_list)
+if enemy.total_enemies == 0:
+    portal = Portal(40,40)
+    portal_list.add(portal)
+    all_sprites_list.add(portal)
+    all_sprites_list.add(portal_list)
+    
 coin2 = Coin(340,340)
 coin_list.add(coin2)
 all_sprites_list.add(coin2)
