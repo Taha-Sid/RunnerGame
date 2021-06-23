@@ -1,4 +1,5 @@
 import pygame
+import random
  
 BLACK = (0,0,0)
 WHITE = (255,255,255)
@@ -44,7 +45,7 @@ map_one = [[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 class Player(pygame.sprite.Sprite):
     def __init__(self,x,y):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load('reaper.png')
+        self.image = pygame.image.load('game_pics/reaper.png')
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -109,7 +110,7 @@ class Player(pygame.sprite.Sprite):
 class Boss(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load('boss_wolf.png')
+        self.image = pygame.image.load('game_pics/boss_wolf.png')
         self.rect = self.image.get_rect()
         self.rect.x = 40
         self.rect.y = 50
@@ -126,7 +127,7 @@ class Boss(pygame.sprite.Sprite):
 class Sword(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load('sword.png')
+        self.image = pygame.image.load('game_pics/sword.png')
         self.rect = self.image.get_rect()
         if player.swap == 1:
             self.rect.x = player.rect.x + 50
@@ -220,7 +221,7 @@ class Wall(pygame.sprite.Sprite):
 class Portal(pygame.sprite.Sprite):
     def __init__(self,x,y):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load('portal.png')
+        self.image = pygame.image.load('game_pics/portal.png')
         self.rect = self.image.get_rect()       
         self.rect.x = x
         self.rect.y = y
@@ -229,7 +230,7 @@ class Portal(pygame.sprite.Sprite):
 class Coin(pygame.sprite.Sprite):
     def __init__(self,x,y):
         pygame.sprite.Sprite.__init__(self)
-        self.spin = [pygame.image.load('coin1.png'),pygame.image.load('coin2.png'),pygame.image.load('coin3.png'),pygame.image.load('coin4.png')]
+        self.spin = [pygame.image.load('coins/coin1.png'),pygame.image.load('coins/coin2.png'),pygame.image.load('coins/coin3.png'),pygame.image.load('coins/coin4.png')]
         self.current_image = 0
         self.image = self.spin[self.current_image]
         self.rect = self.image.get_rect()
@@ -247,7 +248,32 @@ class Coin(pygame.sprite.Sprite):
             self.delay = pygame.time.get_ticks()
 
 
+class PowerUp(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        not_valid = True
+        same = False
+        while not_valid:
+            x_coordinate = random.randint(0,700)
+            y_coordinate = random.randint(0,600)
+            if x_coordinate != wall.rect.x and y_coordinate != wall.rect.y:
+                if len(coin_list) != 0:
+                    all_coins_list = coin_list.sprites()
+                    for i in all_coins_list:
+                        if x_coordinate == i.rect.x or y_coordinate == i.rect.y:
+                            same = True
+                not_valid = same
+
+        self.image = pygame.image.load('game_pics/powerup.png')
+        self.rect = self.image.get_rect()       
+        self.rect.x = x_coordinate
+        self.rect.y = y_coordinate      
+
+
 all_sprites_list = pygame.sprite.Group()
+
+powerup_list = pygame.sprite.Group()
+all_sprites_list.add(powerup_list)
 
 coin_list = pygame.sprite.Group()
 
@@ -309,17 +335,20 @@ while not done:
     if player_wall_hit:
         if keys[pygame.K_UP]:
             player.y_speed -= 30
-            player.image = pygame.image.load('reaper.png')
+            player.image = pygame.image.load('game_pics/reaper.png')
     if keys[pygame.K_RIGHT]:
-        player.image = pygame.image.load('reaper.png')
+        player.image = pygame.image.load('game_pics/reaper.png')
         player.x_speed += 3
     if keys[pygame.K_LEFT]:
-        player.image = pygame.image.load('reaper_backwards.png')
+        player.image = pygame.image.load('game_pics/reaper_backwards.png')
         player.x_speed -= 3
     if keys[pygame.K_SPACE] and len(sword_list.sprites()) == 0:
         sword = Sword()
         sword_list.add(sword)
         all_sprites_list.add(sword)
+
+    if player.health < 10:
+        powerup = PowerUp()
 
     screen.fill(BLACK)
 
