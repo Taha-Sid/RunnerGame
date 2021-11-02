@@ -353,7 +353,7 @@ while not done:
         all_sprites_list.add(powerup)
 
 
-    screen.fill(BLACK)
+    screen.fill((150,0,0))
 
     all_sprites_list.update()
     all_sprites_list.draw(screen)
