@@ -349,6 +349,9 @@ while not done:
 
     if player.health < 10:
         powerup = PowerUp()
+        powerup_list.add(powerup)
+        all_sprites_list.add(powerup)
+
 
     screen.fill(BLACK)
 
