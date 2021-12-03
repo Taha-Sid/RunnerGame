@@ -7,7 +7,7 @@ GREEN = (0,255,0)
 RED = (255,0,0)
 BLUE = (0,0,255)
 pygame.init()
-checker = False
+powerup_checker = False
 
 #mixer.music.load('adventurous_music.mp3')
 
@@ -348,8 +348,8 @@ while not done:
         sword_list.add(sword)
         all_sprites_list.add(sword)
 
-    if player.health < 10 and not checker:
-        checker = True
+    if player.health < 10 and not powerup_checker:
+        powerup_checker = True
         powerup = PowerUp()
         powerup_list.add(powerup)
         all_sprites_list.add(powerup)
