@@ -9,6 +9,7 @@ BLUE = (0,0,255)
 pygame.init()
 checker = False
 speed_powerup = False
+count = 1000000
 
 #mixer.music.load('adventurous_music.mp3')
 
@@ -273,10 +274,12 @@ class PowerUp(pygame.sprite.Sprite):
 
     def update(self):
         global speed_powerup
+        global count
         player_powerup = pygame.sprite.spritecollide(self, player_list, False)
         for c in player_powerup:
             speed_powerup = True
             self.kill()
+            count = 0
             
 
 all_sprites_list = pygame.sprite.Group()
@@ -368,7 +371,9 @@ while not done:
         powerup_list.add(powerup)
         all_sprites_list.add(powerup)
         
-
+    if count == 600:
+        speed_powerup = False
+    count += 1
 
     screen.fill((150,0,0))
 
