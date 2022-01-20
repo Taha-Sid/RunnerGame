@@ -9,6 +9,10 @@ BLUE = (0,0,255)
 pygame.init()
 checker = False
 speed_powerup = False
+speed_powerdown = False
+health_powerup = False
+health_powerdown = False
+all_powerups = [speed_powerup,speed_powerdown,health_powerup,health_powerdown]
 count = 1000000
 
 #mixer.music.load('adventurous_music.mp3')
@@ -270,14 +274,32 @@ class PowerUp(pygame.sprite.Sprite):
         self.image = pygame.image.load('game_pics/powerup.png')
         self.rect = self.image.get_rect()       
         self.rect.x = x_coordinate
-        self.rect.y = y_coordinate      
+        self.rect.y = y_coordinate
+
+        self.r = random.randint(0,3)
 
     def update(self):
-        global speed_powerup
+        global all_powerups
         global count
+        global speed_powerup
+        global speed_powerdown
+        global health_powerup
+        global health_powerdown
+
         player_powerup = pygame.sprite.spritecollide(self, player_list, False)
-        for c in player_powerup:
-            speed_powerup = True
+        for a in player_powerup:
+            if self.r == 0:
+                speed_powerup = True
+                
+            elif self.r == 1:
+                speed_powerdown = True
+                
+            elif self.r == 2:
+                health_powerup = True
+                
+            else:
+                health_powerdown = True
+                
             self.kill()
             count = 0
             
@@ -334,32 +356,46 @@ while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
+            
     keys = pygame.key.get_pressed()
+
     if not player.player_wall:
         player.y_speed += 2 # gravity that constantly pulls player down
+
     if player.player_wall:
         if player.player_wall[0].rect.bottom < player.rect.top:
             player.y_speed += 2
+            
     player.x_speed = 0
     player.rect.y += 10
     player_wall_hit = pygame.sprite.spritecollide(player, walls_list, False)
     player.rect.y -= 10
+    
     if player_wall_hit:
         if keys[pygame.K_UP]:
             player.y_speed -= 30
             player.image = pygame.image.load('game_pics/reaper.png')
+            
     if keys[pygame.K_RIGHT]:
         player.image = pygame.image.load('game_pics/reaper.png')
         if speed_powerup == True:
             player.x_speed += 6
-        else:
-            player.x_speed += 3
+            
+        if speed_powerdown == True:
+            player.x_speed += 1
+
+        player.x_speed += 3
+            
     if keys[pygame.K_LEFT]:
         player.image = pygame.image.load('game_pics/reaper_backwards.png')
         if speed_powerup == True:
             player.x_speed -= 6
-        else:
-            player.x_speed -= 3
+
+        if speed_powerdown == True:
+            player.x_speed -= 1
+
+        player.x_speed -= 3
+            
     if keys[pygame.K_SPACE] and len(sword_list.sprites()) == 0:
         sword = Sword()
         sword_list.add(sword)
@@ -370,9 +406,16 @@ while not done:
         powerup = PowerUp()
         powerup_list.add(powerup)
         all_sprites_list.add(powerup)
+
+    if health_powerup == True:
+        player.health += 10
+
+    if health_powerdown == True:
+        player.health -= 10
         
     if count == 600:
         speed_powerup = False
+        
     count += 1
 
     screen.fill((150,0,0))
