@@ -14,6 +14,8 @@ health_powerup = False
 health_powerdown = False
 all_powerups = [speed_powerup,speed_powerdown,health_powerup,health_powerdown]
 count = 1000000
+font = pygame.font.SysFont('ComicSans', 30, True, False)
+
 
 #mixer.music.load('adventurous_music.mp3')
 
@@ -302,7 +304,6 @@ class PowerUp(pygame.sprite.Sprite):
                 
             self.kill()
             count = 0
-            
 
 all_sprites_list = pygame.sprite.Group()
 
@@ -348,7 +349,9 @@ for x in range(25):
             wall = Wall(x*28,y*24)
             all_sprites_list.add(wall)
             walls_list.add(wall)
-            
+
+health_text = font.render('Health:', True, WHITE)
+
 done = False
 clock = pygame.time.Clock()
  
@@ -419,10 +422,16 @@ while not done:
     count += 1
 
     screen.fill((150,0,0))
-
+    
     all_sprites_list.update()
     all_sprites_list.draw(screen)
+    
+    health_value = font.render(str(player.health), True, WHITE)
+    screen.blit(health_text, [30, 10])
+    screen.blit(health_value, [120, 10])
+
     pygame.display.flip()
+
  
     clock.tick(60)
  
