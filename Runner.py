@@ -7,7 +7,8 @@ GREEN = (0,255,0)
 RED = (255,0,0)
 BLUE = (0,0,255)
 pygame.init()
-powerup_checker = False
+checker = False
+speed_powerup = False
 
 #mixer.music.load('adventurous_music.mp3')
 
@@ -270,6 +271,12 @@ class PowerUp(pygame.sprite.Sprite):
         self.rect.x = x_coordinate
         self.rect.y = y_coordinate      
 
+    def update(self):
+        global speed_powerup
+        player_powerup = pygame.sprite.spritecollide(self, player_list, False)
+        for c in player_powerup:
+            speed_powerup = True
+            
 
 all_sprites_list = pygame.sprite.Group()
 
@@ -339,17 +346,23 @@ while not done:
             player.image = pygame.image.load('game_pics/reaper.png')
     if keys[pygame.K_RIGHT]:
         player.image = pygame.image.load('game_pics/reaper.png')
-        player.x_speed += 3
+        if speed_powerup == True:
+            player.x_speed += 6
+        else:
+            player.x_speed += 3
     if keys[pygame.K_LEFT]:
         player.image = pygame.image.load('game_pics/reaper_backwards.png')
-        player.x_speed -= 3
+        if speed_powerup == True:
+            player.x_speed -= 6
+        else:
+            player.x_speed -= 3
     if keys[pygame.K_SPACE] and len(sword_list.sprites()) == 0:
         sword = Sword()
         sword_list.add(sword)
         all_sprites_list.add(sword)
 
-    if player.health < 10 and not powerup_checker:
-        powerup_checker = True
+    if player.health < 10 and not checker:
+        checker = True
         powerup = PowerUp()
         powerup_list.add(powerup)
         all_sprites_list.add(powerup)
