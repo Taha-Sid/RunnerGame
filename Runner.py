@@ -12,7 +12,6 @@ speed_powerup = False
 speed_powerdown = False
 health_powerup = False
 health_powerdown = False
-all_powerups = [speed_powerup,speed_powerdown,health_powerup,health_powerdown]
 count = 1000000
 font = pygame.font.SysFont('ComicSans', 30, True, False)
 
@@ -216,7 +215,6 @@ class Enemy(pygame.sprite.Sprite):
                 self.rect.x += 80
 
 
-            
 class Wall(pygame.sprite.Sprite):
     def __init__(self,x,y):
         pygame.sprite.Sprite.__init__(self)
@@ -263,8 +261,8 @@ class PowerUp(pygame.sprite.Sprite):
         not_valid = True
         same = False
         while not_valid:
-            x_coordinate = random.randint(0,700)
-            y_coordinate = random.randint(0,600)
+            x_coordinate = random.randint(50,650)
+            y_coordinate = random.randint(50,550)
             if x_coordinate != wall.rect.x and y_coordinate != wall.rect.y:
                 if len(coin_list) != 0:
                     all_coins_list = coin_list.sprites()
@@ -292,13 +290,10 @@ class PowerUp(pygame.sprite.Sprite):
         for a in player_powerup:
             if self.r == 0:
                 speed_powerup = True
-                
             elif self.r == 1:
                 speed_powerdown = True
-                
             elif self.r == 2:
                 health_powerup = True
-                
             else:
                 health_powerdown = True
                 
@@ -412,12 +407,20 @@ while not done:
 
     if health_powerup == True:
         player.health += 10
+        health_powerup = False
 
     if health_powerdown == True:
         player.health -= 10
+        player_powerdown = False
         
     if count == 600:
         speed_powerup = False
+
+    if player.health > 30:
+        player.health = 30
+
+    if player.health < 0:
+        player.health = 0
         
     count += 1
 
@@ -425,13 +428,13 @@ while not done:
     
     all_sprites_list.update()
     all_sprites_list.draw(screen)
-    
+
     health_value = font.render(str(player.health), True, WHITE)
     screen.blit(health_text, [30, 10])
     screen.blit(health_value, [120, 10])
 
-    pygame.display.flip()
 
+    pygame.display.flip()
  
     clock.tick(60)
  
