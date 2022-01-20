@@ -276,6 +276,7 @@ class PowerUp(pygame.sprite.Sprite):
         player_powerup = pygame.sprite.spritecollide(self, player_list, False)
         for c in player_powerup:
             speed_powerup = True
+            self.kill()
             
 
 all_sprites_list = pygame.sprite.Group()
