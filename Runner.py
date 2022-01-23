@@ -346,6 +346,7 @@ for x in range(25):
             walls_list.add(wall)
 
 health_text = font.render('Health:', True, WHITE)
+coins_text = font.render('Coins:', True, WHITE)
 
 done = False
 clock = pygame.time.Clock()
@@ -433,6 +434,9 @@ while not done:
     screen.blit(health_text, [30, 10])
     screen.blit(health_value, [120, 10])
 
+    coins_value = font.render(str(len(coin_list)), True, WHITE)
+    screen.blit(coins_text, [500, 10])
+    screen.blit(coins_value, [600, 10])
 
     pygame.display.flip()
  
