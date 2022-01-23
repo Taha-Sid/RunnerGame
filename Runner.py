@@ -63,6 +63,7 @@ class Player(pygame.sprite.Sprite):
         self.player_wall = []
         self.health = 20
         self.damage = 2
+        self.coin = 0
         
         
     def update(self):
@@ -110,6 +111,7 @@ class Player(pygame.sprite.Sprite):
                     
         player_collects_coin = pygame.sprite.spritecollide(player, coin_list, True)
         if player_collects_coin:
+            self.coin += 1
             #mixer.music.load('coin_collecting_audio.mp3')
             pass
         
@@ -434,9 +436,9 @@ while not done:
     screen.blit(health_text, [30, 10])
     screen.blit(health_value, [120, 10])
 
-    coins_value = font.render(str(len(coin_list)), True, WHITE)
+    coins_value = font.render(str(player.coin), True, WHITE)
     screen.blit(coins_text, [500, 10])
-    screen.blit(coins_value, [600, 10])
+    screen.blit(coins_value, [580, 10])
 
     pygame.display.flip()
  
