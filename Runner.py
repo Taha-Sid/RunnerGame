@@ -118,20 +118,61 @@ class Player(pygame.sprite.Sprite):
 
 
 class Boss(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self,x,y):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load('game_pics/boss_wolf.png')
+        self.boss_walk = [pygame.image.load('boss_walk/boss1.png'),pygame.image.load('boss_walk/boss2.png'),pygame.image.load('boss_walk/boss3.png'),pygame.image.load('boss_walk/boss4.png'),pygame.image.load('boss_walk/boss5.png'),pygame.image.load('boss_walk/boss6.png'),pygame.image.load('boss_walk/boss7.png'),pygame.image.load('boss_walk/boss8.png'),pygame.image.load('boss_walk/boss9.png'),pygame.image.load('boss_walk/boss10.png'),pygame.image.load('boss_walk/boss11.png')]
+        self.boss_walkopposite = [pygame.image.load('boss_walkopposite/boss1.png'),pygame.image.load('boss_walkopposite/boss2.png'),pygame.image.load('boss_walkopposite/boss3.png'),pygame.image.load('boss_walkopposite/boss4.png'),pygame.image.load('boss_walkopposite/boss5.png'),pygame.image.load('boss_walkopposite/boss6.png'),pygame.image.load('boss_walkopposite/boss7.png'),pygame.image.load('boss_walkopposite/boss8.png'),pygame.image.load('boss_walkopposite/boss9.png'),pygame.image.load('boss_walkopposite/boss10.png'),pygame.image.load('boss_walkopposite/boss11.png')]
+        self.current_image = 0
+        self.image = self.boss_walk[0]
         self.rect = self.image.get_rect()
-        self.rect.x = 40
-        self.rect.y = 50
-        self.health = 100
-
+        self.rect.x = x
+        self.rect.y = y
+        self.boss_x_speed = -2
+        self.boss_y_speed = 0
+        self.delay = pygame.time.get_ticks()
+        self.swap = 0 # facing left
+        self.health = 10
+        self.damage = 3
+        
     def update(self):
         if self.health <= 0:
             self.kill()
-            coin = Coin()
+            coin = Coin(self.rect.x,self.rect.y)
             coin_list.add(coin)
             all_sprites_list.add(coin)
+            all_sprites_list.add(coin_list)           
+            portal = Portal(40,40)
+            portal_list.add(portal)
+            all_sprites_list.add(portal)
+            all_sprites_list.add(portal_list)
+
+            
+        time_now = pygame.time.get_ticks()
+        if time_now - self.delay >= 125: # controls boss running animation speed
+            self.current_image += 1
+            if self.current_image > 4:
+                self.current_image = 0
+            if self.swap == 0: # swap changes the list of images to the one facing the other direction
+                self.image = self.boss_walk[self.current_image]
+            else:
+                self.image = self.boss_walkopposite[self.current_image]
+            self.delay = pygame.time.get_ticks()
+        self.rect.x += self.boss_x_speed
+        self.rect.y += self.boss_y_speed
+        if self.rect.x < 30:
+            self.boss_x_speed *= -1
+            self.swap = 1
+        if self.rect.x > 600:
+            self.boss_x_speed *= -1
+            self.swap = 0
+
+        boss_hit_by_sword = pygame.sprite.spritecollide(self, sword_list, False)
+        if boss_hit_by_sword:
+            self.health -= player.damage
+            if self.swap == 1:
+                self.rect.x -= 80
+            else:
+                self.rect.x += 80
             
         
 class Sword(pygame.sprite.Sprite):
@@ -182,11 +223,13 @@ class Enemy(pygame.sprite.Sprite):
             coin_list.add(coin)
             all_sprites_list.add(coin)
             all_sprites_list.add(coin_list)
-            if len(enemy_list.sprites()) == 0:
-                portal = Portal(40,40)
-                portal_list.add(portal)
-                all_sprites_list.add(portal)
-                all_sprites_list.add(portal_list)
+
+        if len(enemy_list.sprites()) == 0:
+            boss = Boss(100,100)
+            boss_list = pygame.sprite.Group()
+            boss_list.add(boss)
+            all_sprites_list.add(boss)
+            all_sprites_list.add(boss_list)
 
             
         time_now = pygame.time.get_ticks()
@@ -315,13 +358,8 @@ player_list.add(player)
 walls_list = pygame.sprite.Group()
 all_sprites_list.add(player)
 
-#boss = Boss()
-#all_sprites_list.add(boss)
-
 enemy = Enemy(600,535)
-#enemy.total_enemies += 1
 enemy2 = Enemy(500,535)
-#enemy.total_enemies += 1
 enemy_list = pygame.sprite.Group()
 enemy_list.add(enemy)
 enemy_list.add(enemy2)
@@ -427,7 +465,9 @@ while not done:
         
     count += 1
 
-    screen.fill((150,0,0))
+    screen.fill((255,255,255))
+    background = pygame.image.load('game_pics/background.jpg')
+    screen.blit(background,(0,0))
     
     all_sprites_list.update()
     all_sprites_list.draw(screen)
