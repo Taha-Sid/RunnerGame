@@ -17,8 +17,9 @@ count = 1000000
 font = pygame.font.SysFont('ComicSans', 30, True, False)
 
 
-#mixer.music.load('adventurous_music.mp3')
-
+mixer.music.load('game_audios/bgm.mp3')
+mixer.music.play()
+        
 size = (700, 600) # x,y
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Runner")
@@ -104,6 +105,8 @@ class Player(pygame.sprite.Sprite):
                 enemy.rect.x -= 30
                 if enemy.rect.x < 30:
                     enemy.rect.x = 30
+            mixer.music.load('game_audios/enemy_attack.mp3')
+            mixer.music.play()
 
         player_hit_portal = pygame.sprite.spritecollide(player, portal_list, False)
         if player_hit_portal:
@@ -113,8 +116,8 @@ class Player(pygame.sprite.Sprite):
         player_collects_coin = pygame.sprite.spritecollide(player, coin_list, True)
         if player_collects_coin:
             self.coin += 1
-            #mixer.music.load('coin_collecting_audio.mp3')
-            pass
+            mixer.music.load('game_audios/coin_pickup.mp3')
+            mixer.music.play()
         
 
 
@@ -466,7 +469,7 @@ while not done:
     if player.health < 0:
         player.health = 0
 
-    if abs(enemy.rect.x - player.rect.x) < 100:
+    if abs(enemy.rect.x - player.rect.x) < 20 and (enemy.rect.y - player.rect.y) < 20:
         mixer.music.load('game_audios/roar.wav')
         mixer.music.play()
         
