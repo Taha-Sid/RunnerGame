@@ -1,5 +1,6 @@
 import pygame
 import random
+from pygame import mixer
  
 BLACK = (0,0,0)
 WHITE = (255,255,255)
@@ -192,6 +193,8 @@ class Sword(pygame.sprite.Sprite):
     def update(self):
         if self.sword_on_screen:
             now = pygame.time.get_ticks()
+            mixer.music.load('game_audios/sword.mp3')
+            mixer.music.play()
             if now - self.spawn_time >= 100:
                 self.kill()
                 self.sword_on_screen = False
@@ -462,6 +465,10 @@ while not done:
 
     if player.health < 0:
         player.health = 0
+
+    if abs(enemy.rect.x - player.rect.x) < 100:
+        mixer.music.load('game_audios/roar.wav')
+        mixer.music.play()
         
     count += 1
 
